@@ -2,28 +2,28 @@ package goreddit
 
 import "github.com/google/uuid"
 
-type Thread struct{
-	ID 			uuid.UUID 	`db:"id"`
-	Title 		string		`db:"title"`
-	Description	string		`db:"description"`
+type Thread struct {
+	ID          uuid.UUID `db:"id"`
+	Title       string    `db:"title"`
+	Description string    `db:"description"`
 }
 
-type Post struct{
-	ID			uuid.UUID 	`db:"id"`
-	ThreadID	uuid.UUID	`db:"thread_id"`
-	Title		string		`db:"title"`
-	Content		string		`db:"content"`
-	Votes		string		`db:"votes"`
+type Post struct {
+	ID       uuid.UUID `db:"id"`
+	ThreadID uuid.UUID `db:"thread_id"`
+	Title    string    `db:"title"`
+	Content  string    `db:"content"`
+	Votes    string    `db:"votes"`
 }
 
-type Comment struct{
-	ID			uuid.UUID	`db:"id"`
-	PostID		uuid.UUID	`db:"post_id"`
-	Content		string		`db:"content"`
-	Votes		string		`db:"votes"`
+type Comment struct {
+	ID      uuid.UUID `db:"id"`
+	PostID  uuid.UUID `db:"post_id"`
+	Content string    `db:"content"`
+	Votes   string    `db:"votes"`
 }
 
-type ThreadStore interface{
+type ThreadStore interface {
 	Thread(id uuid.UUID) (Thread, error)
 	Threads() ([]Thread, error)
 	CreateThread(t *Thread) error
@@ -31,7 +31,7 @@ type ThreadStore interface{
 	DeleteThread(id uuid.UUID) error
 }
 
-type PostStore interface{
+type PostStore interface {
 	Post(id uuid.UUID) (Post, error)
 	PostsByThread(threadID uuid.UUID) ([]Post, error)
 	CreatePost(t *Post) error
@@ -39,10 +39,16 @@ type PostStore interface{
 	DeletePost(id uuid.UUID) error
 }
 
-type CommentStore interface{
+type CommentStore interface {
 	Comment(id uuid.UUID) (Comment, error)
 	CommentsByPost(postID uuid.UUID) ([]Comment, error)
 	CreateComment(t *Comment) error
 	UpdateComment(t *Comment) error
 	DeleteComment(id uuid.UUID) error
+}
+
+type Store interface {
+	ThreadStore
+	PostStore
+	CommentStore
 }
